@@ -1,4 +1,4 @@
-# Solar Grade Mid Level Test
+# Solar Grade Fullstack Test
 
 > Before start coding, read carefully all this document.
 
