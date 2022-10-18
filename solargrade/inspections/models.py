@@ -1,3 +1,4 @@
+import requests
 from django.db import models
 
 
@@ -14,7 +15,38 @@ class Inspections(models.Model):
 
 
 def get_fakesolar_data():
+  # TODO put in settings or similar
+  BASE_URL = "https://6244305b3da3ac772b0c7854.mockapi.io/fakeSolar/3rdParty/"
+  inspections_url = BASE_URL + "inspections"
+  inspectors_url = BASE_URL + "inspectors"
+  try:
+    r = requests.get(inspections_url)
+    if r.status_code != 200:
+      raise Exception("error retrieving inspections")
+    inspections = r.json()
+  except requests.exceptions.RequestException as e:
+    # TODO
+    raise e
+
+  try:
+    r = requests.get(inspectors_url)
+    if r.status_code != 200:
+      raise Exception("error retrieving inspectors")
+    inspectors = r.json()
+  except requests.exceptions.RequestException as e:
+    # TODO
+    raise e
+
+  valid_inspectors = set()
+  for insp in inspectors:
+    if "SolarGrade" in insp["availableIntegrations"]:
+      valid_inspectors.add(insp['id'])
+
   out_inspections = []
+  for inspect in inspections:
+    if str(inspect["inspectorId"]) in valid_inspectors:
+      out_inspections.append(inspect)
+
   return {'data': out_inspections}
 
 
