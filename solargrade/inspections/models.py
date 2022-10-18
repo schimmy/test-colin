@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import requests
 from django.db import models
 
@@ -12,6 +14,30 @@ class Inspections(models.Model):
 
   def __repr__(self):
     return f"{self.title}: company: {self.company}, inspector: {self.inspectorName}"
+
+
+# I'm going to assume that:
+# - these inspections can be scheduled ahead of time, and that info is not relevant
+# - createdAt could be the next day, perhaps they enter the data the next working day
+# - the items for each inspection are all going to be assigned the 'createdAt' time
+def convert_fakesolar(inspections):
+  out_inspections = []
+  for i in inspections:
+    i_date : datetime = datetime.strptime(i['createdAt'], '%Y-%m-%dT%H:%M:%S.%fZ')
+    issues = i['items']
+    num_ok = sum([1 for x in issues if not x['isIssue']])
+    num_warnings = sum([1 for x in issues if (x['isIssue'] and x['severity'] < 60)])
+    num_critical = sum([1 for x in issues if (x['isIssue'] and x['severity'] >= 60)])
+    insp = {
+      'title': f"{i['city']} - {datetime.strftime(i_date, '%Y/%m/%d')}",
+      'inspectorName': i['inspectorName'],
+      'company': 'FakeSolar',
+      'itemsOk': num_ok,
+      'issuesWarningCount': num_warnings,
+      'issuesCriticalCount': num_critical,
+    }
+    out_inspections.append(insp)
+  return out_inspections
 
 
 def get_fakesolar_data():
@@ -37,17 +63,20 @@ def get_fakesolar_data():
     # TODO
     raise e
 
-  valid_inspectors = set()
+  valid_inspectors = {}
   for insp in inspectors:
     if "SolarGrade" in insp["availableIntegrations"]:
-      valid_inspectors.add(insp['id'])
+      valid_inspectors[insp['id']] = insp['name']
 
   out_inspections = []
   for inspect in inspections:
-    if str(inspect["inspectorId"]) in valid_inspectors:
-      out_inspections.append(inspect)
+    inspector_id = str(inspect["inspectorId"])
+    if inspector_id in valid_inspectors:
+      # add in the inspector name for convenience later
+      out_inspections.append(inspect | {'inspectorName': valid_inspectors[inspector_id]})
 
-  return {'data': out_inspections}
+  converted_inspections = convert_fakesolar(out_inspections)
+  return {'data': converted_inspections}
 
 
 def get_inspections(company=''):
