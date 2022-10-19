@@ -20,7 +20,7 @@ def get_inspections_from_db(company=''):
 
 # API endpoint for Angular
 def inspections(request):
-  data = get_inspections_from_db(company=request.GET['company'])
+  data = get_inspections_from_db(company=request.GET.get('company', ''))
   return JsonResponse(data, safe=False)
 
 
