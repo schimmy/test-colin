@@ -1,4 +1,13 @@
 <h1>{{title}}</h1>
+<div *ngIf="error" class="error-box">{{error}}</div>
 <img src="https://www.solargrade.io/media/documents/brandmark-design_4_WFNCtF8.svg" width="200px"/>
-<app-issue-box [numIssues]=numIssuesCritical [numInspectionsAffected]="numInspectionsCritical" severityType="critical"></app-issue-box>
+<app-issue-box [numIssues]=numIssuesCritical
+               [numInspectionsAffected]="numInspectionsCritical"
+               severityType="critical">
+</app-issue-box>
+<app-issue-box [numIssues]=numIssuesWarning
+               [numInspectionsAffected]="numInspectionsWarning"
+               severityType="warning">
+
+</app-issue-box>
 <app-inspection-table [inspections]="inspectionsInput"></app-inspection-table>
