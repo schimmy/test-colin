@@ -82,7 +82,8 @@ def get_fakesolar_data():
     inspector_id = str(inspect["inspectorId"])
     if inspector_id in valid_inspectors:
       # add in the inspector name for convenience later
-      out_inspections.append(inspect | {'inspectorName': valid_inspectors[inspector_id]})
+      inspect["inspectorName"] = valid_inspectors[inspector_id]
+      out_inspections.append(inspect)
 
   converted_inspections = convert_fakesolar(out_inspections)
   return {'data': converted_inspections}
