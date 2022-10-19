@@ -17,20 +17,21 @@ class Inspections(models.Model):
     return f"{self.title}: company: {self.company}, inspector: {self.inspectorName}"
 
 
-# I'm going to assume that:
-# - these inspections can be scheduled ahead of time, and that info is not relevant
-# - createdAt could be the next day, perhaps they enter the data the next working day
-# - the items for each inspection are all going to be assigned the 'createdAt' time
 def convert_fakesolar(inspections):
   """Given the response from the FakeSolar API, turn into something that matches our
   own data model.
 
   Note that we probably should serialize it into an Inspection instance to be safe,
   but since we are just returning as JSON I'm being lazy here.
+
+  I'm going to assume that:
+    - these inspections can be scheduled ahead of time, and that info is not relevant
+    - createdAt could be the next day, perhaps they enter the data the next working day
+    - the items for each inspection are all going to be assigned the 'createdAt' time
   """
   out_inspections = []
   for i in inspections:
-    i_date : datetime = datetime.strptime(i['createdAt'], '%Y-%m-%dT%H:%M:%S.%fZ')
+    i_date: datetime = datetime.strptime(i['createdAt'], '%Y-%m-%dT%H:%M:%S.%fZ')
     issues = i['items']
     num_ok = sum([1 for x in issues if not x['isIssue']])
     num_warnings = sum([1 for x in issues if (x['isIssue'] and x['severity'] < 60)])
@@ -71,6 +72,7 @@ def get_fakesolar_data():
     raise e
 
   valid_inspectors = {}
+  # maybe use list comp here
   for insp in inspectors:
     if "SolarGrade" in insp["availableIntegrations"]:
       valid_inspectors[insp['id']] = insp['name']
