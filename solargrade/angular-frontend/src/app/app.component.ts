@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { IssueBoxComponent } from './issue-box/issue-box.component'
 import { InspectionTableComponent } from './inspection-table/inspection-table.component'
@@ -7,11 +7,12 @@ import { Inspection } from './inspection'
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
+  encapsulation: ViewEncapsulation.None // make sure CSS works
+
 })
 
 export class AppComponent implements OnInit {
-  title = 'SolarGrade - Colin';
   inspectionsInput: Inspection[] = [];
   // TODO: probably make this less FakeSolar-specific, allow for other companies
   api_url = '/inspections?company=FakeSolar'

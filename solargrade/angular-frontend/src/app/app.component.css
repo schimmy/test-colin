@@ -1,27 +1,61 @@
 img {
-  width: 200px;
-  float: left;
+  height: 220px;
+  position: absolute;
+}
+
+.top-info {
+  height: 220px;
+}
+
+.error-box {
+  background-color: red;
+  color: white;
+  height: 2.5em;
+  padding: 1em;
 }
 
 /* issue box formatting */
 app-issue-box {
-  width: 10em;
+  display: block;
+  width: 11em;
+  color: white;
+  float: right;
+  margin: 2em;
+  margin-left: 0;
 }
 
-app-issue-box .big-warn {
-  text-size: 3em;
+.big-warn {
+  font-size: 1.5em;
 }
 
 .critical {
-  background-color: red;
-  color: white;
+  background-color: #DD0000;
+  padding: 0.5em;
 }
 
-.warn {
-  background-color: yellow;
+.warning {
+  background-color: #DDDD00;
+  padding: 0.5em;
 }
 
 /* table formatting */
-tr:nth-child(even) {
-    background-color: grey;
+table {
+  width: 80%;
+  margin: auto;
+  text-align: left;
+  border: 1px black;
+}
+
+th {
+  background-color: #AAA;
+  border: 1px solid black;
+}
+
+td {
+  padding: 0.2em;
+  border: 1px solid black;
+}
+
+tr:nth-child(odd) {
+  background-color: #DDD;
 }
