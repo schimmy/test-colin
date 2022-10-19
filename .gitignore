@@ -1,6 +1,7 @@
 ENV
-.idea
+*.idea
 node_modules
+*.swp
 
 .DS_Store
 
