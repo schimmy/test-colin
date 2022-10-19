@@ -1,0 +1,27 @@
+img {
+  width: 200px;
+  float: left;
+}
+
+/* issue box formatting */
+app-issue-box {
+  width: 10em;
+}
+
+app-issue-box .big-warn {
+  text-size: 3em;
+}
+
+.critical {
+  background-color: red;
+  color: white;
+}
+
+.warn {
+  background-color: yellow;
+}
+
+/* table formatting */
+tr:nth-child(even) {
+    background-color: grey;
+}

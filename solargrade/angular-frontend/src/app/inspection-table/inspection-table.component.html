@@ -1,0 +1,16 @@
+<div>
+  <table>
+    <tr>
+      <th>Title</th>
+      <th>Inspected By</th>
+      <th>Warning</th>
+      <th>Critical</th>
+    </tr>
+    <tr *ngFor="let i of inspections">
+      <td>{{i['title']}}</td>
+      <td>{{i['inspectorName']}}</td>
+      <td>{{i['issuesWarningCount']}}</td>
+      <td>{{i['issuesCriticalCount']}}</td>
+    </tr>
+  </table>
+</div>
