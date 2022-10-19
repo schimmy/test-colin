@@ -1,7 +1,7 @@
-make:
+build:
 	virtualenv -p python3 solargrade/colin-test-env
-	source ./colin-test-env/bin/activate
-	pip install -r requirements.txt
+	cd  solargrade/colin-test-env/bin && source activate && cd -
+	pip install -r solargrade/requirements.txt
 	cd angular-frontend && npm install
 
 run:
