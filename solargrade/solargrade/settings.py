@@ -118,3 +118,7 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+# Defined vars
+FAKE_SOLAR_BASE_URL = "https://6244305b3da3ac772b0c7854.mockapi.io/fakeSolar/3rdParty/"

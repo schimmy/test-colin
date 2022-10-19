@@ -22,6 +22,12 @@ class Inspections(models.Model):
 # - createdAt could be the next day, perhaps they enter the data the next working day
 # - the items for each inspection are all going to be assigned the 'createdAt' time
 def convert_fakesolar(inspections):
+  """Given the response from the FakeSolar API, turn into something that matches our
+  own data model.
+
+  Note that we probably should serialize it into an Inspection instance to be safe,
+  but since we are just returning as JSON I'm being lazy here.
+  """
   out_inspections = []
   for i in inspections:
     i_date : datetime = datetime.strptime(i['createdAt'], '%Y-%m-%dT%H:%M:%S.%fZ')
@@ -42,17 +48,17 @@ def convert_fakesolar(inspections):
 
 
 def get_fakesolar_data():
-  # TODO put in settings or similar
-  BASE_URL = "https://6244305b3da3ac772b0c7854.mockapi.io/fakeSolar/3rdParty/"
-  inspections_url = BASE_URL + "inspections"
-  inspectors_url = BASE_URL + "inspectors"
+  """Hit the FakeSolar API to get inspection data"""
+  base_url = settings.FAKE_SOLAR_BASE_URL
+  inspections_url = base_url + "inspections"
+  inspectors_url = base_url + "inspectors"
   try:
     r = requests.get(inspections_url)
     if r.status_code != 200:
       raise Exception("error retrieving inspections")
     inspections = r.json()
   except requests.exceptions.RequestException as e:
-    # TODO
+    # TODO: do something better here, currently we send it along
     raise e
 
   try:
@@ -61,7 +67,7 @@ def get_fakesolar_data():
       raise Exception("error retrieving inspectors")
     inspectors = r.json()
   except requests.exceptions.RequestException as e:
-    # TODO
+    # TODO: do something better here, currently we send it along
     raise e
 
   valid_inspectors = {}
@@ -81,7 +87,6 @@ def get_fakesolar_data():
 
 
 def get_inspections(company=''):
-  print(f"getting company: {company}")
   # grab from FakeSolar API if requested
   if company.lower() == 'fakesolar':
     return get_fakesolar_data()
