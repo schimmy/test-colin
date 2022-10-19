@@ -1,12 +1,17 @@
+import { NO_ERRORS_SCHEMA } from '@angular/core'
 import { TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { AppComponent } from './app.component';
+import { INSPECTIONS } from './mock-inspections'
 
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
       declarations: [
         AppComponent
       ],
+      schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
   });
 
@@ -16,16 +21,20 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'angular-frontend'`, () => {
+  it(`should have as title 'SolarGrade - Colin'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('angular-frontend');
+    expect(app.title).toEqual('SolarGrade - Colin');
   });
 
-  it('should render title', () => {
+  it(`should set the proper numbers of issues per box`, () => {
     const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.content span')?.textContent).toContain('angular-frontend app is running!');
+    const app = fixture.componentInstance;
+    app.inspectionsInput = INSPECTIONS;
+    app.recalculateIssueBoxes();
+    expect(app.numIssuesWarning).toEqual(2);
+    expect(app.numInspectionsWarning).toEqual(1);
+    expect(app.numIssuesCritical).toEqual(5);
+    expect(app.numInspectionsCritical).toEqual(3);
   });
 });

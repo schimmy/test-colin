@@ -9,10 +9,10 @@ import { Inspection } from './inspection'
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
   encapsulation: ViewEncapsulation.None // make sure CSS works
-
 })
 
 export class AppComponent implements OnInit {
+  title = 'SolarGrade - Colin'
   inspectionsInput: Inspection[] = [];
   // TODO: probably make this less FakeSolar-specific, allow for other companies
   api_url = '/inspections?company=FakeSolar'
@@ -28,11 +28,12 @@ export class AppComponent implements OnInit {
     this.http.get<any>(this.api_url).subscribe({
       next: data => {
         this.inspectionsInput = data['data'] as Inspection[];
-        this.recalculateIssueBoxes()
+        this.recalculateIssueBoxes();
+        this.error = '';
       },
       error: error => {
-        console.error("error: ", error.message)
-        this.error = "Error retrieving data: " + error.message
+        console.error("error: ", error.message);
+        this.error = "Error retrieving data: " + error.message;
       }
     })
   }
@@ -42,8 +43,8 @@ export class AppComponent implements OnInit {
       var warns = insp['issuesWarningCount'];
       var crits = insp['issuesCriticalCount'];
       if (warns > 0) {
-        this.numInspectionsWarning += 1
-        this.numIssuesWarning += warns
+        this.numInspectionsWarning += 1;
+        this.numIssuesWarning += warns;
       }
       if (crits > 0) {
         this.numInspectionsCritical += 1;
@@ -53,7 +54,7 @@ export class AppComponent implements OnInit {
   }
 
   constructor(private http: HttpClient) {
-    this.fetch_inspections_from_api()
+    this.fetch_inspections_from_api();
   }
 
   ngOnInit(): void {
